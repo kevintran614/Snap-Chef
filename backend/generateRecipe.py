@@ -24,7 +24,7 @@ class GenerateRecipe:
             "<section>": "\n"
         }
 
-        self.generate_recipe = None
+        self.generated_recipe = None
 
     def skip_special_tokens(self, text, special_tokens):
         for token in special_tokens:
@@ -72,17 +72,41 @@ class GenerateRecipe:
             self.special_tokens
         )
 
-        self.generate_recipe = generated_recipe
+        self.generated_recipe = generated_recipe
+        self.generated_recipe = self.parse_generated_recipe()
 
-        return generated_recipe
+        return self.generated_recipe
+    
+    def parse_generated_recipe(self):
+        recipes = []
+        recipe = {}
+
+        for text in self.generated_recipe:
+            title_idx = text.find("title:")
+            ingredients_idx = text.find("ingredients:")
+            directions_idx = text.find("directions:")
+
+            if title_idx != -1:
+                if ingredients_idx != -1:
+                    title = text[title_idx + len("title:") : ingredients_idx].strip()
+                    recipe["title"] = title
+
+            if ingredients_idx != -1:
+                if directions_idx != -1:
+                    ingredients = text[ingredients_idx + len("ingredients:") : directions_idx].strip()
+                    recipe["ingredients"] = [ingredient.strip() for ingredient in ingredients.split("--")]
+
+            if directions_idx != -1:
+                    directions = text[directions_idx + len("directions:") : -1].strip()
+                    recipe["directions"] = [direction.strip() for direction in directions.split("--")]
+
+            recipes.append(recipe)
+
+        # print(recipes)
+        return recipes
 
     def print_recipe(self):
-        # items = [
-        #     "macaroni, butter, salt, bacon, milk, flour, pepper, cream corn",
-        #     "provolone cheese, bacon, bread, ginger"
-        # ]
-        # generated = self.generation_function(items)
-        for text in self.generate_recipe:
+        for text in self.generated_recipe:
             sections = text.split("\n")
             for section in sections:
                 section = section.strip()

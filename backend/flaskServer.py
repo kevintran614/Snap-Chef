@@ -11,10 +11,9 @@ def generate_recipe():
     model = gr.GenerateRecipe()
     data = request.get_json()
     ingredients = data.get('ingredients', '')
-    recipe = model.generation_function(ingredients)
-    model.print_recipe()
+    generatedRecipe = model.generation_function(ingredients)
 
-    return jsonify({'recipe': recipe})
+    return jsonify({'recipe': generatedRecipe})
 
 
 if __name__ == "__main__":
