@@ -7,13 +7,7 @@ Welcome to Snap-Chef! This is a full-stack application leveraging React, Bootstr
 2. Download dependencies first:<br>
 
    - cd backend<br>
-   - npm init -y<br>
-   - npm i express cors pg<br>
-   - npm install --save-dev nodemon<br><br>
-
-   - cd frontend<br>
-   - npm install react-bootstrap bootstrap react-router-dom<br>
+   - pip3 install transformers (python backend)<br>
+   - pip3 install flax (python backend)<br>
 
 3. To run the server:<br>
-   - cd frontend > npm run dev
-   - cd backend > npm run dev
