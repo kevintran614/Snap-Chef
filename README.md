@@ -11,5 +11,10 @@ Welcome to Snap-Chef! This is a full-stack application leveraging React, Bootstr
    - pip3 install flax (python backend)<br>
    - pip3 install flask (python backend)<br>
    - pip3 install flask-cors (python backend)<br>
+   - npm init -y (express backend)<br>
+   - npm i express cors pg (express backend)<br>
+   - npm install --save-dev nodemon (express backend)<br>
 
 3. To run the server:<br>
+   - cd backend > python3 flaskSever.py<br>
+   - cd backend > npm run dev<br>
