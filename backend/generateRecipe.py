@@ -79,9 +79,10 @@ class GenerateRecipe:
     
     def parse_generated_recipe(self):
         recipes = []
-        recipe = {}
 
         for text in self.generated_recipe:
+            recipe = {}
+            
             title_idx = text.find("title:")
             ingredients_idx = text.find("ingredients:")
             directions_idx = text.find("directions:")
