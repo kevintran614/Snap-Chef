@@ -13,7 +13,7 @@ def generate_recipe():
     ingredients = data.get('ingredients', '')
     generatedRecipe = model.generation_function(ingredients)
 
-    return jsonify({'recipe': generatedRecipe})
+    return jsonify({'recipes': generatedRecipe})
 
 
 if __name__ == "__main__":
