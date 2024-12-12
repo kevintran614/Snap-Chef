@@ -4,6 +4,8 @@ from flask_cors import CORS
 import generateRecipe as gr
 import computerVision as cv
 
+from PIL import Image
+
 app = Flask(__name__)
 CORS(app)
 
@@ -14,9 +16,9 @@ def health_check():
 @app.route('/generate-ingredients-from-image', methods=['POST'])
 def generate_ingredients_from_image():
     ner = cv.ComputerVision()
-    data = request.get_json()
-    image_url = data.get('url', '')
-    detected_objects = ner.detr(image_url)
+    uploaded_image = request.files["image"]
+    image = Image.open(uploaded_image)
+    detected_objects = ner.detr(image)
     detected_ingredients = ner.ner(detected_objects)
 
     return jsonify({'detected_ingredients': detected_ingredients})

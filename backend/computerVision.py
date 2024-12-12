@@ -23,10 +23,8 @@ class ComputerVision:
         self.ner_tokenizer = AutoTokenizer.from_pretrained("Dizex/InstaFoodRoBERTa-NER")
         self.ner_model = AutoModelForTokenClassification.from_pretrained("Dizex/InstaFoodRoBERTa-NER")
 
-    def detr(self, url):
+    def detr(self, image):
         detected_objects = []
-        # url = "https://img.freepik.com/free-photo/assortment-healthy-food-fridge_23-2149022051.jpg"
-        image = Image.open(requests.get(url, stream=True).raw)
 
         inputs = self.detr_processor(images=image, return_tensors="pt")
         outputs = self.detr_model(**inputs)
