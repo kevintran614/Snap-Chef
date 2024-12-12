@@ -19,7 +19,15 @@ app.get("/health-check", async (req, res) => {
   }
 });
 
-app.post("/generate-recipe", async (req, res) => {
+app.post("/generate-recipe-from-image", async (req, res) => {
+  try {
+    const { imageUrl } = req.body;
+  } catch (error) {
+    res.status(500).json({ error: "Could not reach Python Server" });
+  }
+});
+
+app.post("/generate-recipe-from-text", async (req, res) => {
   try {
     const { ingredients } = req.body;
 
@@ -36,7 +44,7 @@ app.post("/generate-recipe", async (req, res) => {
       return res.status(200).json(checkIngredients.rows[0]);
     }
 
-    const url = "http://127.0.0.1:5000/generate-recipe";
+    const url = "http://127.0.0.1:5000/generate-recipe-from-text";
 
     const response = await fetch(url, {
       method: "POST",
