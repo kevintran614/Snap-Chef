@@ -7,10 +7,9 @@ Welcome to Snap-Chef! This is a full-stack application leveraging React, Bootstr
 2. Download dependencies first:<br>
 
    - cd backend<br>
-   - pip3 install transformers (python backend)<br>
-   - pip3 install flax (python backend)<br>
-   - pip3 install flask (python backend)<br>
-   - pip3 install flask-cors (python backend)<br>
+   - pip3 install flask flask-cors (python backend)<br>
+   - pip3 install flax transformers torch torchvision (python backend)<br>
+     <br>
    - npm init -y (express backend)<br>
    - npm i express cors pg (express backend)<br>
    - npm install --save-dev nodemon (express backend)<br>

@@ -26,7 +26,8 @@ class ComputerVision:
     def detr(self):
         detected_objects = []
 
-        url = "http://images.cocodataset.org/val2017/000000039769.jpg"
+        # url = "http://images.cocodataset.org/val2017/000000039769.jpg"
+        url = "https://media.istockphoto.com/id/1409236261/photo/healthy-food-healthy-eating-background-fruit-vegetable-berry-vegetarian-eating-superfood.jpg?s=612x612&w=0&k=20&c=kYZKgwsQbH_Hscl3mPRKkus0h1OPuL0TcXxZcO2Zdj0="
         image = Image.open(requests.get(url, stream=True).raw)
 
         inputs = self.detr_processor(images=image, return_tensors="pt")
@@ -37,27 +38,25 @@ class ComputerVision:
 
         for score, label, box in zip(results["scores"], results["labels"], results["boxes"]):
             box = [round(i, 2) for i in box.tolist()]
-            print(
-                    f"Detected {self.detr_model.config.id2label[label.item()]} with confidence "
-                    f"{round(score.item(), 3)} at location {box}"
-            )
 
             detected_object = self.detr_model.config.id2label[label.item()]
             confidence = round(score.item(), 3)
 
-            if confidence > 0.9:
+            if confidence > 0.9 and detected_object not in detected_objects:
                 detected_objects.append(detected_object)
-        
-        print(detected_objects)
+
+        detected_objects = (" ").join(detected_objects)
+        print(f"detected the following objects: {detected_objects}")
         return detected_objects
     
-    def ner(self):
+    def ner(self, text):
+        # text = "Today's meal: Fresh olive poké bowl topped with chia seeds. Very delicious!"
+
         pipe = pipeline("ner", model=self.ner_model, tokenizer=self.ner_tokenizer)
-        example = "Today's meal: Fresh olive poké bowl topped with chia seeds. Very delicious!"
 
-        ner_entity_results = pipe(example, aggregation_strategy="simple")
+        ner_entity_results = pipe(text, aggregation_strategy="simple")
 
-        detected_ingredients = self.convert_entities_to_list(example, ner_entity_results)
+        detected_ingredients = self.convert_entities_to_list(text, ner_entity_results)
 
         return detected_ingredients
 
@@ -70,10 +69,15 @@ class ComputerVision:
                     continue
                 ents.append(e)
 
-            return [text[e["start"]:e["end"]] for e in ents]
+            ingredients = [text[e["start"]:e["end"]] for e in ents]
+
+            if len(ingredients) > 0:
+                ingredients = ingredients[0].split()
+
+            return ingredients
 
 if __name__ == '__main__':
     cv = ComputerVision()
-    cv.detr()
-    detected_ingredients = cv.ner()
-    print(detected_ingredients)
+    detected_objects = cv.detr()
+    detected_ingredients = cv.ner(detected_objects)
+    print(f"detected the following ingredients: {detected_ingredients}")
