@@ -10,8 +10,9 @@ const port = 5001;
 
 // middleware
 const app = express();
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+// const storage = multer.memoryStorage();
+// const upload = multer({ storage: storage });
+const upload = multer();
 app.use(express.json());
 app.use(cors());
 
@@ -38,21 +39,33 @@ app.post(
         contentType: image.mimetype,
       });
 
-      const fetchIngredients =
+      const fetchIngredientsUrl =
         "http://127.0.0.1:5000/generate-ingredients-from-image";
 
-      const ingredientsResponse = await axios.post(fetchIngredients, form, {
+      const ingredientsResponse = await axios.post(fetchIngredientsUrl, form, {
         headers: {
           ...form.getHeaders(),
         },
       });
 
-      const ingredients = await ingredientsResponse.data;
-      console.log(ingredients);
+      const detectedIngredients = await ingredientsResponse.data;
+      const ingredients = detectedIngredients.detected_ingredients;
 
-      console.log(ingredients.detected_ingredients);
+      const fetchRecipesUrl = "http://localhost:5001/generate-recipe-from-text";
 
-      res.status(200).json(ingredients);
+      const recipesResponse = await fetch(fetchRecipesUrl, {
+        method: "POST",
+        body: JSON.stringify({
+          ingredients: ingredients,
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+
+      const recipes = await recipesResponse.json();
+
+      res.status(200).json(recipes);
     } catch (error) {
       res.status(500).json({ error: "Error generating recipes for image" });
     }
