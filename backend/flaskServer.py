@@ -16,6 +16,7 @@ def health_check():
 @app.route('/generate-ingredients-from-image', methods=['POST'])
 def generate_ingredients_from_image():
     ner = cv.ComputerVision()
+    print("Uploaded files: ", request.files)
     uploaded_image = request.files["image"]
     image = Image.open(uploaded_image)
     detected_objects = ner.detr(image)

@@ -11,7 +11,7 @@ Welcome to Snap-Chef! This is a full-stack application leveraging React, Bootstr
    - pip3 install flax transformers torch torchvision (python backend)<br>
      <br>
    - npm init -y (express backend)<br>
-   - npm i express cors pg (express backend)<br>
+   - npm i express cors pg multer form-data (express backend)<br>
    - npm install --save-dev nodemon (express backend)<br>
 
 3. To run the server:<br>
