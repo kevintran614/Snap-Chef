@@ -1,6 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 const FormData = require("form-data");
+const axios = require("axios");
 const cors = require("cors");
 const pool = require("./db");
 
@@ -9,7 +10,8 @@ const port = 5001;
 
 // middleware
 const app = express();
-const upload = multer();
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 app.use(express.json());
 app.use(cors());
 
@@ -29,49 +31,28 @@ app.post(
     try {
       const image = req.file;
 
-      if (!image) {
-        return res.status(400).json({ error: "No image provided" });
-      }
-
-      console.log("Image Details: ", {
-        filename: image.originalname,
-        mimetype: image.mimetype,
-        size: image.size,
-      });
-
       const form = new FormData();
+
       form.append("image", image.buffer, {
         filename: image.originalname,
         contentType: image.mimetype,
       });
 
-      const get_ingredients_url =
+      const fetchIngredients =
         "http://127.0.0.1:5000/generate-ingredients-from-image";
 
-      const get_ingredients_response = await fetch(get_ingredients_url, {
-        method: "POST",
-        body: form,
-        headers: form.getHeaders(),
+      const ingredientsResponse = await axios.post(fetchIngredients, form, {
+        headers: {
+          ...form.getHeaders(),
+        },
       });
 
-      console.log("here1");
-      const detectedIngredients = await get_ingredients_response.json();
-      console.log("here2");
+      const ingredients = await ingredientsResponse.data;
+      console.log(ingredients);
 
-      // const get_recipes_url = "http://localhost:5001/generate-recipe-from-text";
+      console.log(ingredients.detected_ingredients);
 
-      // const get_recipes_response = await fetch(get_recipes_url, {
-      //   method: "POST",
-      //   body: JSON.stringify({
-      //     ingredients: detectedIngredients,
-      //   }),
-      //   headers: {
-      //     "Content-type": "application/json; charset=UTF-8",
-      //   },
-      // });
-
-      // recipes = await get_recipes_response.json();
-      res.status(200).json("yes");
+      res.status(200).json(ingredients);
     } catch (error) {
       res.status(500).json({ error: "Error generating recipes for image" });
     }
