@@ -4,8 +4,52 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
+import Alert from "react-bootstrap/Alert";
+
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const Home = () => {
+  const navigate = useNavigate();
+
+  const [ingredients, setIngredients] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+
+  const submitForm = async (e) => {
+    e.preventDefault();
+
+    if (ingredients) {
+      setAlertMessage(`Generating recipes using: ${ingredients}`);
+
+      console.log(ingredients);
+
+      try {
+        const getRecipes = await fetch(
+          "http://localhost:5001/generate-recipe-from-text",
+          {
+            method: "POST",
+            body: JSON.stringify({
+              ingredients: ingredients,
+            }),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+            },
+          }
+        );
+
+        const recipes = await getRecipes.json();
+        console.log(`generated recipes: ${recipes}`);
+
+        sessionStorage.setItem("recipes", JSON.stringify(recipes));
+        navigate("/recipes");
+      } catch (error) {
+        console.log(error.message);
+      }
+    } else {
+      setAlertMessage("Please enter your ingredients.");
+    }
+  };
+
   return (
     <div className="App">
       <Card border="primary" className="text-center">
@@ -13,10 +57,15 @@ const Home = () => {
         <Card.Header>Welcome to Snap Chef!</Card.Header>
         <Card.Body>
           <Card.Title>Snap Chef</Card.Title>
-          <Form>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Enter your groceries here:</Form.Label>
-              <Form.Control type="email" placeholder="Grocieries" />
+          <Form onSubmit={submitForm}>
+            <Form.Group className="mb-3">
+              <Form.Label>Enter your ingredients here:</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Ingredients"
+                value={ingredients}
+                onChange={(e) => setIngredients(e.target.value)}
+              />
               <Form.Text className="text-muted">
                 Have groceries in your refrigerator or pantry and don't know
                 what to make with them? Snap-Chef is the answer!{" "}
@@ -28,6 +77,12 @@ const Home = () => {
           </Form>
         </Card.Body>
       </Card>
+      <br />{" "}
+      {alertMessage && (
+        <Alert variant={alertMessage.includes("Please") ? "danger" : "info"}>
+          {alertMessage}
+        </Alert>
+      )}
     </div>
   );
 };
