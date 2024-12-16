@@ -13,6 +13,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   const [ingredients, setIngredients] = useState("");
+  const [image, setImage] = useState(null);
   const [alertMessage, setAlertMessage] = useState("");
 
   const submitForm = async (e) => {
@@ -47,8 +48,34 @@ const Home = () => {
         sessionStorage.setItem("recipes", JSON.stringify(recipes));
         navigate("/recipes");
       } catch (error) {
-        console.error("Error fetching recipes:", error);
-        setAlertMessage("Failed to generate recipes. Please try again.");
+        console.error("Error fetching recipes from text:", error);
+        setAlertMessage(
+          "Failed to generate recipes from text. Please try again."
+        );
+      }
+    } else if (image) {
+      setAlertMessage("Generating recipes from the uploaded image...");
+
+      try {
+        const form = new FormData();
+        form.append("image", image);
+
+        const getRecipes = await fetch(
+          "http://localhost:5001/generate-recipe-from-image",
+          {
+            method: "POST",
+            body: form,
+          }
+        );
+
+        const recipes = await getRecipes.json();
+        console.log(`Generated recipes: ${JSON.stringify(recipes)}`);
+
+        sessionStorage.setItem("recipes", JSON.stringify(recipes));
+        navigate("/recipes");
+      } catch (error) {
+        console.error("Error fetching recipes from image:", error);
+        setAlertMessage("Failed to generate recipes image. Please try again.");
       }
     } else {
       setAlertMessage("Please enter your ingredients.");
@@ -80,7 +107,10 @@ const Home = () => {
                 <Form.Label>
                   Or, upload a picture of your refrigerator or pantry:
                 </Form.Label>
-                <Form.Control type="file" />
+                <Form.Control
+                  type="file"
+                  onChange={(e) => setImage(e.target.files[0])}
+                />
               </Form.Group>
               <br />
               <Form.Text className="text-muted">
