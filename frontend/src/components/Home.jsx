@@ -62,15 +62,27 @@ const Home = () => {
         <Card.Header>Welcome to Snap Chef!</Card.Header>
         <Card.Body>
           <Card.Title>Snap Chef</Card.Title>
+
           <Form onSubmit={submitForm}>
             <Form.Group className="mb-3">
               <Form.Label>Enter your ingredients here:</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Ingredients"
+                placeholder="Enter Ingredients"
                 value={ingredients}
                 onChange={(e) => setIngredients(e.target.value)}
               />
+
+              <br />
+              <br />
+
+              <Form.Group controlId="formFile" className="mb-3">
+                <Form.Label>
+                  Or, upload a picture of your refrigerator or pantry:
+                </Form.Label>
+                <Form.Control type="file" />
+              </Form.Group>
+              <br />
               <Form.Text className="text-muted">
                 Have groceries in your refrigerator or pantry and don't know
                 what to make with them? Snap-Chef is the answer!{" "}
