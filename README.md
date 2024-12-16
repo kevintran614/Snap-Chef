@@ -10,15 +10,23 @@ Welcome to Snap-Chef! This is a full-stack machine learning application utilizin
   </li>
   <li>
     <img src="images/search.png" alt="Search Page" />
-    <p>Search Page</p>
+    <p>Search Recipes from Text</p>
   </li>
   <li>
     <img src="images/recipe_1.png" alt="Profile Page" />
-    <p>Generate Recipes</p>
+    <p>Generated Recipes from Text</p>
+  </li>
+  <li>
+    <img src="images/search_image.png" alt="Search Page" />
+    <p>Search Recipes from Image</p>
+  </li>
+  <li>
+    <img src="images/image_recipe.png" alt="Profile Page" />
+    <p>Generated Recipes from Image</p>
   </li>
   <li>
     <img src="images/recipe_2.png" alt="Profile Page" />
-    <p>Generate Recipes cont.</p>
+    <p>Additional Example Output</p>
   </li>
 </ul>
 
