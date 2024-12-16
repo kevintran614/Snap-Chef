@@ -11,11 +11,14 @@ const Recipes = () => {
   const navigate = useNavigate();
 
   const generatedRecipes = JSON.parse(sessionStorage.getItem("recipes"));
-  const ingredients = generatedRecipes.ingredients;
-  const recipes = generatedRecipes.recipesmetadata.recipes; // This should be an array of recipes
+  const recipes = generatedRecipes.recipesmetadata.recipes;
 
-  console.log("Ingredients:", ingredients);
-  console.log("Recipes:", recipes);
+  const capitalizeTitle = (title) => {
+    return title
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
 
   return (
     <div className="App">
@@ -27,19 +30,29 @@ const Recipes = () => {
           <Card.Text>Here are your generated recipes:</Card.Text>
 
           {recipes.map((recipe, index) => (
-            <>
-              <Card border="primary" className="text-center" key={index}>
-                <Card.Header>Recipe #{index + 1}</Card.Header>
+            <div key={index}>
+              <Card border="primary" className="text-center recipe-card">
+                <Card.Header>{`Recipe #${index + 1}: ${capitalizeTitle(
+                  recipe.title
+                )}`}</Card.Header>
                 <Card.Body>
-                  <Card.Title>{recipe.title}</Card.Title>
+                  <Card.Title>{capitalizeTitle(recipe.title)}</Card.Title>
+
                   <Card.Text>
                     Ingredients: {recipe.ingredients.join(", ")}
                   </Card.Text>
-                  <Card.Text>{recipe.directions.join(", ")}</Card.Text>
+
+                  <Card.Text>
+                    <ul style={{ paddingLeft: "20px", textAlign: "left" }}>
+                      {recipe.directions.map((direction, idx) => (
+                        <li key={idx}>{`${idx + 1}. ${direction}`}</li>
+                      ))}
+                    </ul>
+                  </Card.Text>
                 </Card.Body>
               </Card>
               <br />
-            </>
+            </div>
           ))}
 
           <br />
