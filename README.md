@@ -1,6 +1,6 @@
 # Snap-Chef
 
-Welcome to Snap-Chef! This is a full-stack machine learning application utilizing React, Bootstrap, Node,js, PostgreSQL, and AWS S3 Bucket that leverages Hugging Face's computer vision and natural language processing trained-models to identify ingredients from user-uploaded images or text and recommend recipes with detailed instructions. Have groceries in your refrigerator or pantry and don't know what to make with them? Snap-Chef is the answer!
+Welcome to Snap-Chef! This is a full-stack machine learning application utilizing React, Bootstrap, Node,js, PostgreSQL, and AWS S3 Bucket that leverages Hugging Face's computer vision and named entity recognition models to identify ingredients from user-uploaded images or text and generate recipes with detailed instructions. Have groceries in your refrigerator or pantry and don't know what to make with them? Snap-Chef is the answer!
 
 1. Image Demo:
 <ul>
