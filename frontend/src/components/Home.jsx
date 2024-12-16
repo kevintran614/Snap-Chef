@@ -19,9 +19,13 @@ const Home = () => {
     e.preventDefault();
 
     if (ingredients) {
-      setAlertMessage(`Generating recipes using: ${ingredients}`);
+      setAlertMessage(`Generating recipes using: ${ingredients}...`);
 
       console.log(ingredients);
+
+      const ingredientsPayload = ingredients
+        .split(",")
+        .map((ingredient) => ingredient.trim());
 
       try {
         const getRecipes = await fetch(
@@ -29,7 +33,7 @@ const Home = () => {
           {
             method: "POST",
             body: JSON.stringify({
-              ingredients: ingredients,
+              ingredients: ingredientsPayload,
             }),
             headers: {
               "Content-type": "application/json; charset=UTF-8",
@@ -38,12 +42,13 @@ const Home = () => {
         );
 
         const recipes = await getRecipes.json();
-        console.log(`generated recipes: ${recipes}`);
+        console.log(`Generated recipes: ${JSON.stringify(recipes)}`);
 
         sessionStorage.setItem("recipes", JSON.stringify(recipes));
         navigate("/recipes");
       } catch (error) {
-        console.log(error.message);
+        console.error("Error fetching recipes:", error);
+        setAlertMessage("Failed to generate recipes. Please try again.");
       }
     } else {
       setAlertMessage("Please enter your ingredients.");

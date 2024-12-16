@@ -75,18 +75,13 @@ app.post(
 app.post("/generate-recipe-from-text", async (req, res) => {
   try {
     const { ingredients } = req.body;
-    console.log(
-      `received the following ingredients from frontend: ${ingredients}, ${typeof ingredients}`
-    );
 
     const queryStartTime = Date.now();
 
-    console.log("here");
     const checkIngredients = await pool.query(
       "SELECT * FROM recipes WHERE ingredients = ($1)",
       [ingredients]
     );
-    console.log("past query");
 
     if (checkIngredients.rows.length > 0) {
       const queryEndTime = Date.now();

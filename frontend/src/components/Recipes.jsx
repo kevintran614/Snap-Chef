@@ -10,6 +10,13 @@ import { useNavigate } from "react-router-dom";
 const Recipes = () => {
   const navigate = useNavigate();
 
+  const generatedRecipes = JSON.parse(sessionStorage.getItem("recipes"));
+  const ingredients = generatedRecipes.ingredients;
+  const recipes = generatedRecipes.recipesmetadata.recipes; // This should be an array of recipes
+
+  console.log("Ingredients:", ingredients);
+  console.log("Recipes:", recipes);
+
   return (
     <div className="App">
       <Card border="primary" className="text-center">
@@ -17,17 +24,27 @@ const Recipes = () => {
         <Card.Header>Snap Chef has generated your recipes!</Card.Header>
         <Card.Body>
           <Card.Title>Generated Recipes</Card.Title>
-          <Form>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Enter your groceries here:</Form.Label>
-              <Form.Control type="text" placeholder="Grocieries" />
-              <Form.Text className="text-muted">
-                Have groceries in your refrigerator or pantry and don't know
-                what to make with them? Snap-Chef is the answer!{" "}
-              </Form.Text>
-            </Form.Group>
-            <Button onClick={() => navigate("/")}>Generate New Recipes</Button>
-          </Form>
+          <Card.Text>Here are your generated recipes:</Card.Text>
+
+          {recipes.map((recipe, index) => (
+            <>
+              <Card border="primary" className="text-center" key={index}>
+                <Card.Header>Recipe #{index + 1}</Card.Header>
+                <Card.Body>
+                  <Card.Title>{recipe.title}</Card.Title>
+                  <Card.Text>
+                    Ingredients: {recipe.ingredients.join(", ")}
+                  </Card.Text>
+                  <Card.Text>{recipe.directions.join(", ")}</Card.Text>
+                </Card.Body>
+              </Card>
+              <br />
+            </>
+          ))}
+
+          <br />
+
+          <Button onClick={() => navigate("/")}>Generate New Recipes</Button>
         </Card.Body>
       </Card>
     </div>
