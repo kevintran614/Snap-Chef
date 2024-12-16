@@ -17,7 +17,7 @@ Welcome to Snap-Chef! This is a full-stack machine learning application utilizin
     <p>Generated Recipes from Text</p>
   </li>
   <li>
-    <img src="images/search_image.png" alt="Search Page" />
+    <img src="images/image_search.png" alt="Search Page" />
     <p>Search Recipes from Image</p>
   </li>
   <li>
